@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('register/', user_views.registerUser, name="register"),
 
-
+    path('profile/update/', user_views.update_user_profile, name="user-profile-update"),
 
 
 
