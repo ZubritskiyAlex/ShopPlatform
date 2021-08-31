@@ -4,7 +4,6 @@ from .models import Product
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -24,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
     def get__id(self, obj):
         return obj.id
 
-    def get__isAdmin(self, obj):
+    def get_isAdmin(self, obj):
         return obj.is_staff
 
 

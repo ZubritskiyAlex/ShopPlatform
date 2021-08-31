@@ -37,9 +37,11 @@ def registerUser(request):
         )
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
-    except:
+    except Exception as e:
+
         message = {'detail': 'User with this email already exists'}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -57,10 +59,6 @@ def update_user_profile(request):
     user.save()
 
     return Response(serializer.data)
-
-
-
-
 
 
 @api_view(['GET'])
