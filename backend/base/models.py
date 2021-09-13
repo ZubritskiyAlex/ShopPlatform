@@ -2,6 +2,19 @@ from django.db import models
 from django.contrib.auth. models import User
 
 
+class Shop(models.Model):
+    name = models.CharField(max_length=200)
+    image = models.ImageField(null=True, blank=True, default='/placeholder.png')
+    description = models.TextField(null=True, blank=True)
+    category = models.CharField(max_length=200, null=True, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return f"{self.name}-{self.category}-{self.owner}"
+
+
 class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
@@ -16,9 +29,11 @@ class Product(models.Model):
     countInStock = models.IntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
+    shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
+# add shop fk
 
 
 class Review(models.Model):
