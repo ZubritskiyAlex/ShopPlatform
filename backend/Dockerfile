@@ -1,10 +1,19 @@
-# Указывает Docker использовать официальный образ python 3 с dockerhub в качестве базового образа
-FROM python:3.7
-# Устанавливает переменную окружения, которая гарантирует, что вывод из python будет отправлен прямо в терминал без предварительной буферизации
+FROM python:3
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-# Устанавливает рабочий каталог контейнера — "app"
-WORKDIR /app
-# Копирует все файлы из нашего локального проекта в контейнер
-ADD . /app
-# Запускает команду pip install для всех библиотек, перечисленных в requirements.txt
+
+WORKDIR /code
+
+RUN apt-get update && apt-get install -y --no-install-recommends netcat && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+COPY requirements.txt /code/
 RUN pip install -r requirements.txt
+COPY . /code/
+
