@@ -46,14 +46,15 @@ def deleteProduct(request, pk):
 @permission_classes([IsAdminUser])
 def createProduct(request):
     user = request.user
+    data = request.data
     product = Product.objects.create(
         user=user,
-        name='Sample Name',
-        price=0,
-        brand='Sample Brand',
-        countInStock=0,
-        category='Sample Category',
-        description='',
+        name=data['name'],
+        price=data['price'],
+        brand=data['brand'],
+        countInStock=data['countInStock'],
+        category=data['category'],
+        description=data['description'],
     )
 
     serializer = ProductSerializer(product, many=False)

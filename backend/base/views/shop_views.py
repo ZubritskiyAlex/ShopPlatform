@@ -1,8 +1,6 @@
-from datetime import timezone
-
-from django.contrib.auth.decorators import login_required
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from ..models import Shop
@@ -23,19 +21,20 @@ def get_shop(request, pk):
     return Response(serializer.data)
 
 
+@csrf_exempt
 @api_view(['POST'])
-@login_required
 def create_shop(request):
     user = request.user
     data = request.data
     shop = Shop.objects.create(
         name=data['name'],
         owner=user,
-        createdAt=timezone.now(),
+        createdAt=datetime.now(),
         description=data['description'],
         category=data['category'],
         image=data['image']
     )
     serializer = ShopSerializer(shop, many=False)
     return Response(serializer.data)
+
 
