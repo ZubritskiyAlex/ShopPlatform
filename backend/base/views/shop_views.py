@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ..models import Shop
@@ -27,14 +28,29 @@ def create_shop(request):
     user = request.user
     data = request.data
     shop = Shop.objects.create(
-        name=data['name'],
+        name='Sample Name',
         owner=user,
         createdAt=datetime.now(),
-        description=data['description'],
-        category=data['category'],
-        image=data['image']
+        description=' ',
+        category='Sample Category',
     )
     serializer = ShopSerializer(shop, many=False)
     return Response(serializer.data)
 
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_shop(request, pk):
+    data = request.data
+    user = request.user
+    shop = Shop.objects.get(_id=pk)
+    shop.name = data['name']
+    shop.owner = user
+    shop.description = data['description']
+    shop.category = data['category']
+
+    shop.save()
+
+    serializer = ShopSerializer(shop, many= False)
+    return Response(serializer.data)
 

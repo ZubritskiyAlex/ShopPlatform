@@ -2,7 +2,7 @@
 from django.urls import path
 
 from ..views.product_views import getProduct, getProducts, deleteProduct, createProduct, updateProduct, uploadImage, \
-    createProductReview, getTopProducts
+    createProductReview, getTopProducts, show_products_of_store
 
 urlpatterns = [
 
@@ -10,6 +10,8 @@ urlpatterns = [
 
     path('create/', createProduct, name='product-create'),
     path('upload/', uploadImage, name='image-upload'),
+
+    path('productsofstore/<int:store_id>/', show_products_of_store, name='productsofstore'),
 
 
     path('update/<str:pk>/', updateProduct, name='product-update'),

@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from rest_framework.response import Response
 
-from ..models import Product, Review
+from ..models import Product, Review, Shop
 from ..serializers import ProductSerializer
 
 
@@ -49,12 +49,12 @@ def createProduct(request):
     data = request.data
     product = Product.objects.create(
         user=user,
-        name=data['name'],
-        price=data['price'],
-        brand=data['brand'],
-        countInStock=data['countInStock'],
-        category=data['category'],
-        description=data['description'],
+        name='Sample Name',
+        price=0,
+        brand='Sample Brand',
+        countInStock=0,
+        category='Sample Category',
+        description='',
     )
 
     serializer = ProductSerializer(product, many=False)
@@ -131,6 +131,14 @@ def createProductReview(request, pk):
 
         return Response({'Review Added'})
 
+
+#fix it
+def show_products_of_store(request, store_id):
+    products = Shop.objects.get(id=store_id).product_set.all()
+    context = {
+      'products': products,
+    }
+    return Response(request, context)
 
 
 
